@@ -1,0 +1,3 @@
+# Useful Prometheus Queries
+node_cpu_seconds_total: CPU usage
+node_memory_MemAvailable_bytes: Available memory
