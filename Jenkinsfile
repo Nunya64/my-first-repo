@@ -1,26 +1,18 @@
 pipeline {
     agent any
-    environment {
-        COMPOSE_DOCKER_CLI_BUILD = '1'
-        DOCKER_BUILDKIT = '1'
-    }
     stages {
-        stage('Clone Repository') {
+        stage('Build and Run Nginx with Docker Compose') {
             steps {
-                echo 'Cloning your GitHub repository...'
-                git url: 'https://github.com/Nunya64/my-first-repo.git', branch: 'main'
-            }
-        }
-        stage('Build and Run Services') {
-            steps {
-                echo 'Starting web and redis services with Docker Compose...'
+                echo 'Starting Nginx and Redis services with Docker Compose...'
                 sh 'docker compose -f docker-compose.yml up -d --build'
             }
         }
-        stage('Verify Services') {
+        stage('Verify Nginx Service') {
             steps {
-                echo 'Checking if services are running...'
+                echo 'Checking running containers...'
                 sh 'docker ps'
+                echo 'Verifying index.html is served on port 5900...'
+                sh 'curl -f http://localhost:5900 || exit 1'
             }
         }
     }
