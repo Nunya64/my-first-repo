@@ -6,13 +6,13 @@ services:
     depends_on:
       - redis
     networks:
-      - jenkins-net
+      - jenkins-network1
   redis:
     image: redis:latest
     ports:
       - "6379:6379"
     networks:
-      - jenkins-net
+      - jenkins-network1
 networks:
   jenkins-network:
-    name: jenkins-net
+    name: jenkins-network1
