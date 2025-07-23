@@ -11,8 +11,8 @@ pipeline {
             steps {
                 echo 'Checking running containers...'
                 sh 'docker ps'
-                echo 'Verifying index.html is served on port 5900...'
-                sh 'curl -f http://localhost:5900 || exit 1'
+                echo 'Verifying index.html is served on port 5000...'
+                sh 'curl -f http://localhost:5000 || exit 1'
             }
         }
     }
