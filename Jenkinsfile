@@ -1,10 +1,26 @@
+```groovy
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'docker:20.10'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
+    environment {
+        COMPOSE_DOCKER_CLI_BUILD = '1'
+        DOCKER_BUILDKIT = '1'
+    }
     stages {
         stage('Clone Repository') {
             steps {
                 echo 'Cloning your GitHub repository...'
                 git url: 'https://github.com/Nunya64/my-first-repo.git', branch: 'main'
+            }
+        }
+        stage('Install Docker Compose') {
+            steps {
+                echo 'Installing Docker Compose...'
+                sh 'apk add --no-cache docker-compose'
             }
         }
         stage('Build and Run Services') {
@@ -23,7 +39,8 @@ pipeline {
     post {
         always {
             echo 'Cleaning up: Stopping and removing containers...'
-            sh 'docker-compose -f docker-compose.yml down'
+            sh 'docker-compose -f docker-compose.yml down || true'
         }
     }
 }
+```
