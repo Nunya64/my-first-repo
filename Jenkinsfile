@@ -1,36 +1,29 @@
 pipeline {
     agent any
-
-    environment {
-        GIT_REPO = 'https://github.com/Nunya64/my-first-repo.git'
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
-                git url: "${env.GIT_REPO}", credentialsId: 'github-ssh'
+                echo 'Cloning your GitHub repository...'
+                git url: 'https://github.com/Nunya64/my-first-repo.git', branch: 'main'
             }
         }
-
-        stage('Build') {
+        stage('Build and Run Services') {
             steps {
-                echo 'Building the project...'
-                sh 'echo Simulated build step'
+                echo 'Starting web and redis services with Docker Compose...'
+                sh 'docker-compose -f docker-compose.yml up -d --build'
             }
         }
-
-        stage('Test') {
+        stage('Verify Services') {
             steps {
-                echo 'Running tests...'
-                sh 'echo Simulated test step'
+                echo 'Checking if services are running...'
+                sh 'docker ps'
             }
         }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying application...'
-                sh 'echo Simulated deploy step'
-            }
+    }
+    post {
+        always {
+            echo 'Cleaning up: Stopping and removing containers...'
+            sh 'docker-compose -f docker-compose.yml down'
         }
     }
 }
