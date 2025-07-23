@@ -1,12 +1,18 @@
-version: "3.8"
 services:
   web:
     build: .
     ports:
-      - "5000:5000"
+      - "5900:80"
     depends_on:
       - redis
+    networks:
+      - jenkins-net
   redis:
     image: redis:latest
     ports:
       - "6379:6379"
+    networks:
+      - jenkins-net
+networks:
+  jenkins-network:
+    name: jenkins-net
