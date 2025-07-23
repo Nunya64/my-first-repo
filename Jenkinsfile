@@ -1,4 +1,3 @@
-```groovy
 pipeline {
     agent {
         docker {
@@ -17,16 +16,10 @@ pipeline {
                 git url: 'https://github.com/Nunya64/my-first-repo.git', branch: 'main'
             }
         }
-        stage('Install Docker Compose') {
-            steps {
-                echo 'Installing Docker Compose...'
-                sh 'apk add --no-cache docker-compose'
-            }
-        }
         stage('Build and Run Services') {
             steps {
                 echo 'Starting web and redis services with Docker Compose...'
-                sh 'docker-compose -f docker-compose.yml up -d --build'
+                sh 'docker compose -f docker-compose.yml up -d --build'
             }
         }
         stage('Verify Services') {
@@ -39,8 +32,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up: Stopping and removing containers...'
-            sh 'docker-compose -f docker-compose.yml down || true'
+            sh 'docker compose -f docker-compose.yml down || true'
         }
     }
 }
-```
