@@ -24,10 +24,4 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            echo 'Cleaning up: Stopping and removing containers...'
-            sh 'docker compose -f docker-compose.yml down || true'
-        }
-    }
 }
